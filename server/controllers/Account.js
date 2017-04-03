@@ -14,6 +14,7 @@ const logout = (req, res) => {
 };
 
 const login = (req, res) => {
+
 	const username = `${req.body.username}`;
 	const password = `${req.body.pass}`;
 
@@ -30,7 +31,10 @@ const login = (req, res) => {
 	});
 };
 
-const signup = (req, res) => {
+const signup = (request, response) => {
+
+	var req = request;
+	var res = response;
 
 	req.body.username = `${req.body.username}`;
 	req.body.pass = `${req.body.pass}`;
