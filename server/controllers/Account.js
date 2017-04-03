@@ -14,7 +14,10 @@ const logout = (req, res) => {
 	res.redirect('/');
 };
 
-const login = (req, res) => {
+const login = (request, response) => {
+
+	var request = req;
+	const response = res;
 
 	const username = `${req.body.username}`;
 	const password = `${req.body.pass}`;
