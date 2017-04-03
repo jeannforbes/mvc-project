@@ -16,8 +16,8 @@ const logout = (req, res) => {
 
 const login = (request, response) => {
 
-	var request = req;
-	const response = res;
+	var req = request;
+	const res = response;
 
 	const username = `${req.body.username}`;
 	const password = `${req.body.pass}`;
