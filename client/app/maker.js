@@ -55,14 +55,8 @@ const renderDomoList = function(){
 	}
 
 	const domoNodes = this.state.data.map(function(domo){
-		console.dir(domo);
 		return(
-			<form key={domo._id} className='domo'
-				onSubmit = {this.handleSubmit}
-				name='AdventureForm'
-				action='/adventure'
-				method='POST'
-			>
+			<div key={domo._id} className='domo'>
 			  <img src='/assets/img/domoface.jpeg' alt='domoface' className='domoFace' />
 			  <h3 className='domoName'>{domo.name} {domo.title}</h3>
 			  <h3 className='domoStat'>Class: {domo.class}</h3>
@@ -70,8 +64,8 @@ const renderDomoList = function(){
 			  <h3 className='domoStat'>Fortitude: {domo.stats.fortitude}</h3>
 			  <h3 className='domoStat'>Treachery: {domo.stats.treachery}</h3>
 			  <h3 className='domoStat'>HP: {domo.stats.hp}</h3>
-			  <input className='makeDomoAdventure' type='submit' value='ADVENTURE!' />
-			</form>
+			  
+			</div>
 		);
 	});
 

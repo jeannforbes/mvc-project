@@ -87,15 +87,9 @@ var renderDomoList = function renderDomoList() {
 	}
 
 	var domoNodes = this.state.data.map(function (domo) {
-		console.dir(domo);
 		return React.createElement(
-			'form',
-			{ key: domo._id, className: 'domo',
-				onSubmit: this.handleSubmit,
-				name: 'AdventureForm',
-				action: '/adventure',
-				method: 'POST'
-			},
+			'div',
+			{ key: domo._id, className: 'domo' },
 			React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domoface', className: 'domoFace' }),
 			React.createElement(
 				'h3',
@@ -133,8 +127,7 @@ var renderDomoList = function renderDomoList() {
 				{ className: 'domoStat' },
 				'HP: ',
 				domo.stats.hp
-			),
-			React.createElement('input', { className: 'makeDomoAdventure', type: 'submit', value: 'ADVENTURE!' })
+			)
 		);
 	});
 
