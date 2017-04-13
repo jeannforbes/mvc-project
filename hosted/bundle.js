@@ -37,13 +37,37 @@ var renderDomo = function renderDomo() {
 			{ htmlFor: 'name' },
 			'Name: '
 		),
-		React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'Domo Name' }),
+		React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'ex. Johnny Sly' }),
 		React.createElement(
 			'label',
-			{ htmlFor: 'age' },
-			'Age: '
+			{ htmlFor: 'title' },
+			'Title: '
 		),
-		React.createElement('input', { id: 'domoAge', type: 'text', name: 'age', placeholder: 'Domo Age' }),
+		React.createElement('input', { id: 'domoTitle', type: 'text', name: 'title', placeholder: 'ex. The Pernicious' }),
+		React.createElement(
+			'label',
+			{ htmlFor: 'class' },
+			'Class: '
+		),
+		React.createElement(
+			'select',
+			{ id: 'domoClass', type: 'text', name: 'class', defaultValue: 'Vagrant' },
+			React.createElement(
+				'option',
+				{ value: 'Vagrant' },
+				'Vagrant'
+			),
+			React.createElement(
+				'option',
+				{ value: 'Scavenger' },
+				'Scavenger'
+			),
+			React.createElement(
+				'option',
+				{ value: 'Drifter' },
+				'Drifter'
+			)
+		),
 		React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
 		React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
 	);
@@ -63,24 +87,54 @@ var renderDomoList = function renderDomoList() {
 	}
 
 	var domoNodes = this.state.data.map(function (domo) {
+		console.dir(domo);
 		return React.createElement(
-			'div',
-			{ key: domo._id, className: 'domo' },
+			'form',
+			{ key: domo._id, className: 'domo',
+				onSubmit: this.handleSubmit,
+				name: 'AdventureForm',
+				action: '/adventure',
+				method: 'POST'
+			},
 			React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domoface', className: 'domoFace' }),
 			React.createElement(
 				'h3',
 				{ className: 'domoName' },
-				'Name: ',
 				domo.name,
-				' '
+				' ',
+				domo.title
 			),
 			React.createElement(
 				'h3',
-				{ className: 'domoAge' },
-				'Age: ',
-				domo.age,
-				' '
-			)
+				{ className: 'domoStat' },
+				'Class: ',
+				domo.class
+			),
+			React.createElement(
+				'h3',
+				{ className: 'domoStat' },
+				'Cunning: ',
+				domo.stats.cunning
+			),
+			React.createElement(
+				'h3',
+				{ className: 'domoStat' },
+				'Fortitude: ',
+				domo.stats.fortitude
+			),
+			React.createElement(
+				'h3',
+				{ className: 'domoStat' },
+				'Treachery: ',
+				domo.stats.treachery
+			),
+			React.createElement(
+				'h3',
+				{ className: 'domoStat' },
+				'HP: ',
+				domo.stats.hp
+			),
+			React.createElement('input', { className: 'makeDomoAdventure', type: 'submit', value: 'ADVENTURE!' })
 		);
 	});
 

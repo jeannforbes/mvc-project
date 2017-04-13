@@ -13,12 +13,50 @@ const DomoSchema = new mongoose.Schema({
 		required: true,
 		trim: true,
 		set: setName,
+		default: 'Mysterious Stranger',
+	},
+	class: {
+		type: String,
+		required: true,
+		trim: true,
+		default: 'Vagrant',
+	},
+	title: {
+		type: String,
+		required: true,
+		trim: true,
+		default: 'The Bland',
+	},
+	stats: {
+		fortitude: {
+			type: Number,
+			min: 1,
+			required: true,
+			default: 1,
+		},
+		cunning: {
+			type: Number,
+			min: 1,
+			required: true,
+			default: 1,
+		},
+		treachery: {
+			type: Number,
+			min: 1,
+			required: true,
+			default: 1,
+		},
+		hp: {
+			type: Number,
+			min: 0,
+			required: true,
+			default: 10,
+		},
 	},
 
-	age: {
-		type: Number,
-		min: 0,
-		required: true,
+	inventory: {
+		backpack: [],
+		equipped: [],
 	},
 
 	owner: {
@@ -35,7 +73,10 @@ const DomoSchema = new mongoose.Schema({
 
 DomoSchema.statics.ToAPI = (doc) => ({
 	name: doc.name,
-	age: doc.age,
+	title: doc.title,
+	stats: doc.stats,
+	inventory: doc.inventory,
+
 });
 
 DomoSchema.statics.findByOwner = (ownerId, callback) => {
@@ -43,7 +84,11 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
 		owner: convertId(ownerId),
 	};
 
-	return DomoModel.find(search).select('name age').exec(callback);
+	return DomoModel.find(search).select('name title class stats inventory').exec(callback);
+};
+
+DomoSchema.statics.updateDomo = (doc, callback) => {
+	return callback;
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);

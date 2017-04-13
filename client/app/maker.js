@@ -30,9 +30,15 @@ const renderDomo = function(){
 			className='domoForm'
 		>
 		  <label htmlFor='name'>Name: </label>
-		  <input id='domoName' type='text' name='name' placeholder='Domo Name' />
-		  <label htmlFor='age'>Age: </label>
-		  <input id='domoAge' type='text' name='age' placeholder='Domo Age' />
+		  <input id='domoName' type='text' name='name' placeholder='ex. Johnny Sly' />
+		  <label htmlFor='title'>Title: </label>
+		  <input id='domoTitle' type='text' name='title' placeholder='ex. The Pernicious' />
+		  <label htmlFor='class'>Class: </label>
+		  <select id='domoClass' type='text' name='class' defaultValue='Vagrant'>
+		  	<option value='Vagrant'>Vagrant</option>
+		  	<option value='Scavenger'>Scavenger</option>
+		  	<option value='Drifter'>Drifter</option>
+		  </select>
 		  <input type='hidden' name='_csrf' value={this.props.csrf} />
 		  <input className='makeDomoSubmit' type='submit' value='Make Domo' />
 		</form>
@@ -49,12 +55,23 @@ const renderDomoList = function(){
 	}
 
 	const domoNodes = this.state.data.map(function(domo){
+		console.dir(domo);
 		return(
-			<div key={domo._id} className='domo'>
+			<form key={domo._id} className='domo'
+				onSubmit = {this.handleSubmit}
+				name='AdventureForm'
+				action='/adventure'
+				method='POST'
+			>
 			  <img src='/assets/img/domoface.jpeg' alt='domoface' className='domoFace' />
-			  <h3 className='domoName'>Name: {domo.name} </h3>
-			  <h3 className='domoAge'>Age: {domo.age} </h3>
-			</div>
+			  <h3 className='domoName'>{domo.name} {domo.title}</h3>
+			  <h3 className='domoStat'>Class: {domo.class}</h3>
+			  <h3 className='domoStat'>Cunning: {domo.stats.cunning}</h3>
+			  <h3 className='domoStat'>Fortitude: {domo.stats.fortitude}</h3>
+			  <h3 className='domoStat'>Treachery: {domo.stats.treachery}</h3>
+			  <h3 className='domoStat'>HP: {domo.stats.hp}</h3>
+			  <input className='makeDomoAdventure' type='submit' value='ADVENTURE!' />
+			</form>
 		);
 	});
 

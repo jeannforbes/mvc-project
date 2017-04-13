@@ -3,7 +3,6 @@ const Account = models.Account;
 
 const loginPage = (req, res) => {
 	var token = req.csrfToken();
-	console.log(token);
 	res.render('login', {csrfToken: token });
 };
 

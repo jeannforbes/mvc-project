@@ -40,7 +40,8 @@ var handleSignup = function handleSignup(e) {
 var renderLogin = function renderLogin() {
 	return React.createElement(
 		'form',
-		{ id: 'loginForm', name: 'loginForm',
+		{ id: 'loginForm',
+			name: 'loginForm',
 			onSubmit: this.handleSubmit,
 			action: '/login',
 			method: 'POST',
@@ -55,7 +56,7 @@ var renderLogin = function renderLogin() {
 		React.createElement(
 			'label',
 			{ htmlFor: 'pass' },
-			'Password: '
+			'Password:'
 		),
 		React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
 		React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
@@ -122,15 +123,15 @@ var setup = function setup(csrf) {
 	var loginButton = document.querySelector('#loginButton');
 	var signupButton = document.querySelector('#signupButton');
 
-	signupButton.addEventListener("click", function (e) {
+	loginButton.addEventListener("click", function (e) {
 		e.preventDefault();
-		createSignupWindow(csrf);
+		createLoginWindow(csrf);
 		return false;
 	});
 
-	loginButton.addEventListener("click", function (e) {
+	signupButton.addEventListener("click", function (e) {
 		e.preventDefault();
-		createLoginWindow(crsf);
+		createSignupWindow(csrf);
 		return false;
 	});
 

@@ -37,15 +37,16 @@ const handleSignup = (e) => {
 
 const renderLogin = function(){
 	return(
-		<form id='loginForm' name='loginForm'
+		<form id='loginForm'
+			name='loginForm'
 			onSubmit={this.handleSubmit}
 			action='/login'
 			method='POST'
 			className='mainForm'
-			>
+		>
 		  <label htmlFor='username'>Username: </label>
 		  <input id='user' type='text' name='username' placeholder='username' />
-		  <label htmlFor='pass'>Password: </label>
+		  <label htmlFor='pass'>Password:</label>
 		  <input id='pass' type='password' name='pass' placeholder='password' />
 		  <input type='hidden' name='_csrf' value={this.props.csrf} />
 		  <input className='formSubmit' type='submit' value='Sign In' />
@@ -77,7 +78,7 @@ const renderSignup = function(){
 const createLoginWindow = function(csrf){
 	const LoginWindow = React.createClass({
 		handleSubmit: handleLogin,
-		render: renderLogin
+		render: renderLogin,
 	});
 
 	ReactDOM.render(
@@ -103,15 +104,15 @@ const setup = function(csrf){
 	const loginButton = document.querySelector('#loginButton');
 	const signupButton = document.querySelector('#signupButton');
 
-	signupButton.addEventListener("click", (e) => {
+	loginButton.addEventListener("click", (e) => {
 		e.preventDefault();
-		createSignupWindow(csrf);
+		createLoginWindow(csrf);
 		return false;
 	});
 
-	loginButton.addEventListener("click", (e) => {
+	signupButton.addEventListener("click", (e) => {
 		e.preventDefault();
-		createLoginWindow(crsf);
+		createSignupWindow(csrf);
 		return false;
 	});
 

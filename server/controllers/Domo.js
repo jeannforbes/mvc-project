@@ -14,13 +14,13 @@ const makerPage = (req, res) => {
 
 const makeDomo = (req, res) => {
 
-	if(!req.body.name || !req.body.age){
-		return res.status(400).json({error: 'RAWR! Boh name and age are required.'});
-	}
+	if(!req.body.name) return res.status(400).json({error: 'RAWR! A name is required.'});
 
 	const domoData = {
 		name: req.body.name,
-		age: req.body.age,
+		title: req.body.title || 'The Bland',
+		class: req.body.class,
+		stats: {cunning: 1, fortitude:1, treachery:1, hp:10},
 		owner: req.session.account._id,
 	};
 
@@ -52,7 +52,12 @@ const getDomos = (request, response) => {
 		}
 
 		return res.json({domos:docs});
-	})
+	});
+}
+
+const adventureDomo = (req, res) => {
+	
+	return new Domo.DomoModel(domoData);
 }
 
 module.exports.makerPage = makerPage;
