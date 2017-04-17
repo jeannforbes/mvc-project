@@ -54,7 +54,6 @@ const getDomos = (request, response) => {
 		return res.json({domos:docs});
 	});
 }
-// Weird CircleCI error saying this 0-length line was too long.
 const deleteDomos = (req, res) => {
 	return Domo.DomoModel.deleteDomo(req.session.account._id, (err, docs) => {
 		if(err){
