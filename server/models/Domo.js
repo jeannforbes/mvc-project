@@ -87,8 +87,12 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
 	return DomoModel.find(search).select('name title class stats inventory').exec(callback);
 };
 
-DomoSchema.statics.updateDomo = (doc, callback) => {
-	return callback;
+DomoSchema.statics.deleteDomo = (ownerId, callback) => {
+	const search = {
+		owner: ownerId,
+	};
+
+	return DomoModel.find(search).remove().exec(callback);
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);

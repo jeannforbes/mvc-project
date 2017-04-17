@@ -1,5 +1,6 @@
 let domoRenderer;
 let domoForm;
+let domoDeleteForm;
 let DomoFormClass;
 let DomoListClass;
 
@@ -20,8 +21,19 @@ const handleDomo = (e) => {
 	return false;
 };
 
+const handleDeleteDomo = (e) => {
+	e.preventDefault();
+
+	sendAjax('GET', $('#deleteDomosForm').attr('action'), $('#deleteDomosForm').serialize(), function(){
+		domoRenderer.loadDomosFromServer();
+	});
+
+	return false;
+};
+
 const renderDomo = function(){
 	return(
+		<div>
 		<form id='domoForm'
 			onSubmit={this.handleSubmit}
 			name='domoForm'
@@ -42,6 +54,18 @@ const renderDomo = function(){
 		  <input type='hidden' name='_csrf' value={this.props.csrf} />
 		  <input className='makeDomoSubmit' type='submit' value='Make Domo' />
 		</form>
+		<form id='deleteDomosForm'
+			onSubmit={this.handleDelete}
+			name='deleteDomosForm'
+			action='/deleteDomos'
+			method='GET'
+			className='domoForm'
+		>
+			<input type='hidden' name='_csrf' value={this.props.csrf} />
+			<input className='makeDomoSubmit' type='submit' value='Delete Domos' />
+
+		</form>
+		</div>
 	);
 };
 
@@ -64,7 +88,6 @@ const renderDomoList = function(){
 			  <h3 className='domoStat'>Fortitude: {domo.stats.fortitude}</h3>
 			  <h3 className='domoStat'>Treachery: {domo.stats.treachery}</h3>
 			  <h3 className='domoStat'>HP: {domo.stats.hp}</h3>
-			  
 			</div>
 		);
 	});
@@ -79,6 +102,7 @@ const renderDomoList = function(){
 const setup = function(csrf) {
 	DomoFormClass = React.createClass({
 		handleSubmit: handleDomo,
+		handleDelete: handleDeleteDomo,
 		render: renderDomo,
 	});
 
@@ -101,8 +125,9 @@ const setup = function(csrf) {
 		<DomoFormClass csrf={csrf} />, document.querySelector('#makeDomo'),
 	);
 
+
 	domoRenderer = ReactDOM.render(
-	<DomoListClass />, document.querySelector('#domos')
+		<DomoListClass />, document.querySelector('#domos')
 	);
 };
 

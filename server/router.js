@@ -12,7 +12,7 @@ const router = (app) => {
 	app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
 	app.post('/maker', mid.requiresLogin, controllers.Domo.make);
 	app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
-	//app.post('/adventure', mid.requiresLogin, controllers.Domo.adventureDomo);
+	app.get('/deleteDomos', mid.requiresLogin, controllers.Domo.deleteDomos);
 };
 
 module.exports = router;

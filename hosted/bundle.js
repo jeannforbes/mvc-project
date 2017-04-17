@@ -2,6 +2,7 @@
 
 var domoRenderer = void 0;
 var domoForm = void 0;
+var domoDeleteForm = void 0;
 var DomoFormClass = void 0;
 var DomoListClass = void 0;
 
@@ -22,54 +23,80 @@ var handleDomo = function handleDomo(e) {
 	return false;
 };
 
+var handleDeleteDomo = function handleDeleteDomo(e) {
+	e.preventDefault();
+
+	sendAjax('GET', $('#deleteDomosForm').attr('action'), $('#deleteDomosForm').serialize(), function () {
+		domoRenderer.loadDomosFromServer();
+	});
+
+	return false;
+};
+
 var renderDomo = function renderDomo() {
 	return React.createElement(
-		'form',
-		{ id: 'domoForm',
-			onSubmit: this.handleSubmit,
-			name: 'domoForm',
-			action: '/maker',
-			method: 'POST',
-			className: 'domoForm'
-		},
+		'div',
+		null,
 		React.createElement(
-			'label',
-			{ htmlFor: 'name' },
-			'Name: '
-		),
-		React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'ex. Johnny Sly' }),
-		React.createElement(
-			'label',
-			{ htmlFor: 'title' },
-			'Title: '
-		),
-		React.createElement('input', { id: 'domoTitle', type: 'text', name: 'title', placeholder: 'ex. The Pernicious' }),
-		React.createElement(
-			'label',
-			{ htmlFor: 'class' },
-			'Class: '
-		),
-		React.createElement(
-			'select',
-			{ id: 'domoClass', type: 'text', name: 'class', defaultValue: 'Vagrant' },
+			'form',
+			{ id: 'domoForm',
+				onSubmit: this.handleSubmit,
+				name: 'domoForm',
+				action: '/maker',
+				method: 'POST',
+				className: 'domoForm'
+			},
 			React.createElement(
-				'option',
-				{ value: 'Vagrant' },
-				'Vagrant'
+				'label',
+				{ htmlFor: 'name' },
+				'Name: '
+			),
+			React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'ex. Johnny Sly' }),
+			React.createElement(
+				'label',
+				{ htmlFor: 'title' },
+				'Title: '
+			),
+			React.createElement('input', { id: 'domoTitle', type: 'text', name: 'title', placeholder: 'ex. The Pernicious' }),
+			React.createElement(
+				'label',
+				{ htmlFor: 'class' },
+				'Class: '
 			),
 			React.createElement(
-				'option',
-				{ value: 'Scavenger' },
-				'Scavenger'
+				'select',
+				{ id: 'domoClass', type: 'text', name: 'class', defaultValue: 'Vagrant' },
+				React.createElement(
+					'option',
+					{ value: 'Vagrant' },
+					'Vagrant'
+				),
+				React.createElement(
+					'option',
+					{ value: 'Scavenger' },
+					'Scavenger'
+				),
+				React.createElement(
+					'option',
+					{ value: 'Drifter' },
+					'Drifter'
+				)
 			),
-			React.createElement(
-				'option',
-				{ value: 'Drifter' },
-				'Drifter'
-			)
+			React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
+			React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
 		),
-		React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
-		React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
+		React.createElement(
+			'form',
+			{ id: 'deleteDomosForm',
+				onSubmit: this.handleDelete,
+				name: 'deleteDomosForm',
+				action: '/deleteDomos',
+				method: 'GET',
+				className: 'domoForm'
+			},
+			React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
+			React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Delete Domos' })
+		)
 	);
 };
 
@@ -143,6 +170,7 @@ var setup = function setup(csrf) {
 		displayName: 'DomoFormClass',
 
 		handleSubmit: handleDomo,
+		handleDelete: handleDeleteDomo,
 		render: renderDomo
 	});
 

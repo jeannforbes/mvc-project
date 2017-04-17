@@ -55,11 +55,18 @@ const getDomos = (request, response) => {
 	});
 }
 
-const adventureDomo = (req, res) => {
-	
-	return new Domo.DomoModel(domoData);
+const deleteDomos = (req, res) => {
+	return Domo.DomoModel.deleteDomo(req.session.account._id, (err, docs) => {
+		if(err){
+			console.log(err);
+			return res.status(400).json({error: 'An error occurred'});
+		}
+
+		return res.json({domos:docs});
+	});
 }
 
 module.exports.makerPage = makerPage;
 module.exports.make = makeDomo;
 module.exports.getDomos = getDomos;
+module.exports.deleteDomos = deleteDomos;
