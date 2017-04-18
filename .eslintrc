@@ -3,6 +3,6 @@
   "rules": {
     "no-underscore-dangle" : "off",
     "no-plusplus": "off",
-    "max-line-length":[true,140],
+    "max-line-length":1,
   }
 }
