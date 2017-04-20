@@ -2,68 +2,66 @@ const models = require('../models');
 const Domo = models.Domo;
 
 const makerPage = (req, res) => {
-	Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) =>{
-		if(err){
-			console.log(err);
-			return res.status(400).json({error: 'An error occurred'});
-		}
+  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
 
-		return res.render('app', { csrfToken: req.csrfToken(), domos: docs});
-	});
+    return res.render('app', { csrfToken: req.csrfToken(), domos: docs });
+  });
 };
 
 const makeDomo = (req, res) => {
+  if (!req.body.name) return res.status(400).json({ error: 'RAWR! A name is required.' });
 
-	if(!req.body.name) return res.status(400).json({error: 'RAWR! A name is required.'});
+  const domoData = {
+    name: req.body.name,
+    title: req.body.title || 'The Bland',
+    class: req.body.class,
+    stats: { cunning: 1, fortitude: 1, treachery: 1, hp: 10 },
+    owner: req.session.account._id,
+  };
 
-	const domoData = {
-		name: req.body.name,
-		title: req.body.title || 'The Bland',
-		class: req.body.class,
-		stats: {cunning: 1, fortitude:1, treachery:1, hp:10},
-		owner: req.session.account._id,
-	};
+  const newDomo = new Domo.DomoModel(domoData);
+  const domoPromise = newDomo.save();
 
-	const newDomo = new Domo.DomoModel(domoData);
-	const domoPromise = newDomo.save();
+  domoPromise.then(() => res.json({ redirect: '/maker' }));
 
-	domoPromise.then(() => res.json({redirect: '/maker'}));
+  domoPromise.catch((err) => {
+    console.log(err);
+    if (err.code === 11000) {
+      return res.status(400).json({ error: 'Domo already exists' });
+    }
 
-	domoPromise.catch((err) => {
-		console.log(err);
-		if(err.code === 11000){
-			return res.status(400).json({error: 'Domo already exists'});
-		}
+    return res.status(400).json({ error: 'An error occured' });
+  });
 
-		return res.status(400).json({error: 'An error occured'});
-	});
-
-	return domoPromise;
-}
+  return domoPromise;
+};
 
 const getDomos = (request, response) => {
-	const req = request;
-	const res = response;
+  const req = request;
+  const res = response;
 
-	return Domo.DomoModel.findByOwner(req.session.account._id, (err,docs) =>{
-		if(err){
-			console.log(err);
-			return res.status(400).json({error: 'An error occurred'});
-		}
+  return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
 
-		return res.json({domos:docs});
-	});
-}
-const deleteDomos = (req, res) => {
-	return Domo.DomoModel.deleteDomo(req.session.account._id, (err, docs) => {
-		if(err){
-			console.log(err);
-			return res.status(400).json({error: 'An error occurred'});
-		}
+    return res.json({ domos: docs });
+  });
+};
 
-		return res.json({domos:docs});
-	});
-}
+const deleteDomos = (req, res) => Domo.DomoModel.deleteDomo(req.session.account._id, (err, docs) => {
+  if (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred' });
+  }
+
+  return res.json({ domos: docs });
+});
 
 module.exports.makerPage = makerPage;
 module.exports.make = makeDomo;
