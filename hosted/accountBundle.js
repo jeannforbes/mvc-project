@@ -30,12 +30,6 @@ var renderPasswordChangeWindow = function renderPasswordChange() {
 		},
 		React.createElement(
 			'label',
-			{ htmlFor: 'currentPass' },
-			'Old Password:'
-		),
-		React.createElement('input', { id: 'currentPass', type: 'password', name: 'currentPass', placeholder: 'old password' }),
-		React.createElement(
-			'label',
 			{ htmlFor: 'pass' },
 			'New Password:'
 		),
@@ -80,8 +74,14 @@ $(document).ready(function () {
 });
 "use strict";
 
-var handleError = function handleError(message) {
+const handleError = (message) => {
 	$("#errorMessage").text(message);
+	$("#errorMessage").animate({
+		opacity: 1,
+	}, 500);
+	$("#errorMessage").animate({
+		opacity: 0,
+	}, 3000);
 };
 
 var redirect = function redirect(response) {

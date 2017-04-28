@@ -144,3 +144,15 @@ button:hover, .oppRespond:hover, .oppBookmark:hover, .makeOppSubmit:hover{
 .selected{
     background-color: #99efff;
 }
+
+#errorMessage{
+    z-index: 999;
+    top: 50%;
+    position: absolute;
+    opacity: 0;
+    background-color: red;
+    color: white;
+    font-size: 1.2em;
+    width: 100%;
+    margin: auto;
+}

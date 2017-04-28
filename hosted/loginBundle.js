@@ -8,8 +8,6 @@ var handleLogin = function handleLogin(e) {
 		return false;
 	}
 
-	console.log($('input[name=_csrf').val());
-
 	sendAjax('POST', $('#loginForm').attr('action'), $('#loginForm').serialize(), redirect);
 
 	return false;
@@ -147,6 +145,12 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
 	$("#errorMessage").text(message);
+	$("#errorMessage").animate({
+		opacity: 1
+	}, 500);
+	$("#errorMessage").animate({
+		opacity: 0
+	}, 3000);
 };
 
 var redirect = function redirect(response) {

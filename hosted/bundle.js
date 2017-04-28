@@ -135,7 +135,7 @@ var renderOppList = function renderOppList() {
 				React.createElement(
 					'h3',
 					{ className: 'emptyOpp' },
-					'No events available'
+					'No events match this filter'
 				)
 			)
 		);
@@ -324,6 +324,12 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
 	$("#errorMessage").text(message);
+	$("#errorMessage").animate({
+		opacity: 1
+	}, 500);
+	$("#errorMessage").animate({
+		opacity: 0
+	}, 3000);
 };
 
 var redirect = function redirect(response) {

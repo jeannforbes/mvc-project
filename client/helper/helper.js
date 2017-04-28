@@ -1,5 +1,11 @@
 const handleError = (message) => {
 	$("#errorMessage").text(message);
+	$("#errorMessage").animate({
+		opacity: 1,
+	}, 500);
+	$("#errorMessage").animate({
+		opacity: 0,
+	}, 3000);
 };
 
 const redirect = (response) => {

@@ -86,7 +86,7 @@ const renderOppList = function(){
 			  	<button onClick={this.loadOppsByRSVP}>RSVPs</button>
 			</div>
 			<div className='oppList'>
-			<h3 className='emptyOpp'>No events available</h3>
+			<h3 className='emptyOpp'>No events match this filter</h3>
 			</div>
 			</div>
 		);
