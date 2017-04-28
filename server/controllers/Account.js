@@ -1,9 +1,15 @@
 const models = require('../models');
 const Account = models.Account;
+const Opp = models.Opp;
 
 const loginPage = (req, res) => {
   const token = req.csrfToken();
   res.render('login', { csrfToken: token });
+};
+
+const settingsPage = (req, res) => {
+  const token = req.csrfToken();
+  res.render('account', { csrfToken: token });
 };
 
 const logout = (req, res) => {
@@ -19,7 +25,7 @@ const login = (request, response) => {
   const password = `${req.body.pass}`;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'RAWR.  All fields are required.' });
+    return res.status(400).json({ error: 'All fields are required.' });
   }
 
   return Account.AccountModel.authenticate(username, password, (err, account) => {
@@ -54,6 +60,8 @@ const signup = (request, response) => {
       username: req.body.username,
       salt,
       password: hash,
+      bookmarks: [],
+      rsvps: [],
     };
 
     const newAccount = new Account.AccountModel(accountData);
@@ -71,8 +79,75 @@ const signup = (request, response) => {
         return res.status(400).json({ error: 'Username already in use.' });
       }
 
-      return res.status(400).json({ error: 'An error occured' });
+      return res.status(400).json({ error: 'An error occurred' });
     });
+  });
+};
+
+const passwordChange = (req, res) => {
+
+  req.body.pass = `${req.body.pass}`;
+  req.body.pass2 = `${req.body.pass2}`;
+  
+  const updatedAccount = Account.AccountModel.changePassword(
+    req.session.account._id,
+    req.body.pass, (err, docs) => {
+      if(err){
+        console.log(err);
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+
+      return res.json({ redirect: '/account' });
+  });
+};
+
+const addBookmark = (req, res) => {
+  const updatedOpp = Opp.OppModel.addBookmark(
+    req.body.uniqueId, 
+    req.session.account._id, (err, docs) => {
+      if(err){
+        console.log(err);
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+      return res.status(200).json({message: 'Bookmarked successfully'});
+  });
+};
+
+const getBookmarks = (req, res) => {
+  const id = req.session.account._id;
+  return Opp.OppModel.find({ bookmarks: id }, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.status(200).json({opps: docs});
+  });
+};
+
+const addRSVP = (req, res) => {
+  const updatedOpp = Opp.OppModel.addRSVP( 
+    req.body.uniqueId, 
+    req.session.account._id, (err, docs) => {
+      if(err){
+        console.log(err);
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+
+      return res.status(200).json({message: 'RSVPed successfully'});
+  });
+
+};
+
+const getRSVPs = (req, res) => {
+  const id = req.session.account._id;
+  return Opp.OppModel.find({rsvps: id }, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+    console.log(docs);
+    return res.json({ opps: docs });
   });
 };
 
@@ -91,4 +166,10 @@ module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.settings = settingsPage;
+module.exports.passwordChange = passwordChange;
 module.exports.getToken = getToken;
+module.exports.addRSVP = addRSVP;
+module.exports.getRSVPs = getRSVPs;
+module.exports.addBookmark = addBookmark;
+module.exports.getBookmarks = getBookmarks;

@@ -13,7 +13,7 @@ const csrf = require('csurf');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/EventMe';
 
 mongoose.connect(dbURL, (err) => {
   if (err) {
@@ -52,7 +52,7 @@ app.use(session({
     port: redisURL.port,
     pass: redisPASS,
   }),
-  secret: 'Domo Arigato',
+  secret: 'neither can live while the other survives',
   resave: true,
   saveUninitialized: true,
   cookie: {
@@ -72,6 +72,8 @@ app.use(cookieParser());
 
 app.use(csrf());
 app.use((err, req, res, next) => {
+  console.log("poohie");
+  console.log(req.body);
   if (err.code !== 'EBADCSRFTOKEN') return next(err);
 
   console.log('ERROR: missing CSRF token');

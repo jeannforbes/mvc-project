@@ -1,199 +1,314 @@
 'use strict';
 
-var domoRenderer = void 0;
-var domoForm = void 0;
-var domoDeleteForm = void 0;
-var DomoFormClass = void 0;
-var DomoListClass = void 0;
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var handleDomo = function handleDomo(e) {
+var oppRenderer = void 0;
+var oppForm = void 0;
+var OppFormClass = void 0;
+var OppListClass = void 0;
+
+var handleMakeOpp = function handleMakeOpp(e) {
 	e.preventDefault();
 
-	$('#domoMessage').animate({ width: 'hide' }, 350);
+	$('#oppMessage').animate({ width: 'hide' }, 350);
 
-	if ($('#domoName').val == '' || $('#domoAge').val() == '') {
-		handleError('RAWR!  All fields are required');
+	if ($('#oppName').val == '' || $('#oppDate').val() == '' || $('#oppInfo').val() == '') {
+		handleError('Event name, date and description are required.');
 		return false;
 	}
 
-	sendAjax('POST', $('#domoForm').attr('action'), $('#domoForm').serialize(), function () {
-		domoRenderer.loadDomosFromServer();
+	sendAjax('POST', $('#oppForm').attr('action'), $('#oppForm').serialize(), function () {
+		oppRenderer.loadOppsFromServer();
 	});
 
 	return false;
 };
 
-var handleDeleteDomo = function handleDeleteDomo(e) {
+var handleRSVPOpp = function handleRSVPOpp(e) {
 	e.preventDefault();
 
-	sendAjax('GET', $('#deleteDomosForm').attr('action'), $('#deleteDomosForm').serialize(), function () {
-		domoRenderer.loadDomosFromServer();
-	});
+	e.target.querySelector('.oppRespond').innerHTML = 'RSVPed!';
+
+	sendAjax('POST', $(e.target).attr('action'), $(e.target).serialize(), function () {});
 
 	return false;
 };
 
-var renderDomo = function renderDomo() {
+var handleBookmarkOpp = function handleBookmarkOpp(e) {
+	e.preventDefault();
+
+	e.target.querySelector('.oppBookmark').innerHTML = 'Bookmarked!';
+
+	sendAjax('POST', $(e.target).attr('action'), $(e.target).serialize(), function () {});
+
+	return false;
+};
+
+var renderOpp = function renderOpp() {
 	return React.createElement(
 		'div',
-		null,
+		{ id: 'oppFormContainer' },
 		React.createElement(
 			'form',
-			{ id: 'domoForm',
+			{ id: 'oppForm',
 				onSubmit: this.handleSubmit,
-				name: 'domoForm',
+				name: 'oppForm',
 				action: '/maker',
 				method: 'POST',
-				className: 'domoForm'
+				className: 'oppForm'
 			},
 			React.createElement(
-				'label',
-				{ htmlFor: 'name' },
-				'Name: '
+				'h3',
+				{ htmlFor: 'oppName' },
+				'Event Name '
 			),
-			React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'ex. Johnny Sly' }),
+			React.createElement('input', { id: 'oppName', type: 'text', name: 'name', placeholder: 'event title here' }),
+			React.createElement(
+				'h3',
+				{ htmlFor: 'oppDate' },
+				'Date '
+			),
+			React.createElement('input', { id: 'oppDate', type: 'date', name: 'date' }),
+			React.createElement(
+				'h3',
+				{ htmlFor: 'oppInfo' },
+				'Description '
+			),
+			React.createElement('textarea', { id: 'oppInfo', type: 'text', name: 'info' }),
+			React.createElement(
+				'h3',
+				{ htmlFor: 'oppContact' },
+				'Contact Information '
+			),
 			React.createElement(
 				'label',
-				{ htmlFor: 'title' },
-				'Title: '
+				{ htmlFor: 'oppEmail' },
+				'Email: '
 			),
-			React.createElement('input', { id: 'domoTitle', type: 'text', name: 'title', placeholder: 'ex. The Pernicious' }),
+			React.createElement('input', { id: 'oppEmail', type: 'email', name: 'email', placeholder: 'me@example.com' }),
 			React.createElement(
 				'label',
-				{ htmlFor: 'class' },
-				'Class: '
+				{ htmlFor: 'oppPhone' },
+				'Phone: '
 			),
+			React.createElement('input', { id: 'oppPhone', type: 'tel', name: 'phone', placeholder: '(xxx)xxx-xxxx' }),
 			React.createElement(
-				'select',
-				{ id: 'domoClass', type: 'text', name: 'class', defaultValue: 'Vagrant' },
-				React.createElement(
-					'option',
-					{ value: 'Vagrant' },
-					'Vagrant'
-				),
-				React.createElement(
-					'option',
-					{ value: 'Scavenger' },
-					'Scavenger'
-				),
-				React.createElement(
-					'option',
-					{ value: 'Drifter' },
-					'Drifter'
-				)
+				'label',
+				{ htmlFor: 'oppContactOther' },
+				'Other: '
 			),
+			React.createElement('textarea', { id: 'oppContactOther', name: 'other' }),
 			React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
-			React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
-		),
-		React.createElement(
-			'form',
-			{ id: 'deleteDomosForm',
-				onSubmit: this.handleDelete,
-				name: 'deleteDomosForm',
-				action: '/deleteDomos',
-				method: 'GET',
-				className: 'domoForm'
-			},
-			React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
-			React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Delete Domos' })
+			React.createElement('input', { className: 'makeOppSubmit', type: 'submit', value: 'Make Event' })
 		)
 	);
 };
 
-var renderDomoList = function renderDomoList() {
+var renderOppList = function renderOppList() {
 	if (this.state.data.length === 0) {
 		return React.createElement(
 			'div',
-			{ className: 'domoList' },
+			null,
 			React.createElement(
-				'h3',
-				{ className: 'emptyDomo' },
-				'No Domos yet'
+				'div',
+				{ id: 'filters' },
+				'FILTERS',
+				React.createElement(
+					'button',
+					{ onClick: this.loadOppsFromServer },
+					'None'
+				),
+				React.createElement(
+					'button',
+					{ onClick: this.loadOppsByBookmark },
+					'Bookmarks'
+				),
+				React.createElement(
+					'button',
+					{ onClick: this.loadOppsByRSVP },
+					'RSVPs'
+				)
+			),
+			React.createElement(
+				'div',
+				{ className: 'oppList' },
+				React.createElement(
+					'h3',
+					{ className: 'emptyOpp' },
+					'No events available'
+				)
 			)
 		);
 	}
 
-	var domoNodes = this.state.data.map(function (domo) {
+	var oppNodes = this.state.data.map(function (opp) {
+		var _React$createElement, _React$createElement2;
+
+		var date = new Date(opp.date);
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var dt = date.getDate() + 1;
+
 		return React.createElement(
 			'div',
-			{ key: domo._id, className: 'domo' },
-			React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domoface', className: 'domoFace' }),
+			{ key: opp._id, className: 'opp' },
 			React.createElement(
-				'h3',
-				{ className: 'domoName' },
-				domo.name,
-				' ',
-				domo.title
+				'h2',
+				{ className: 'oppName' },
+				opp.name
 			),
 			React.createElement(
 				'h3',
-				{ className: 'domoStat' },
-				'Class: ',
-				domo.class
+				null,
+				'Date'
+			),
+			React.createElement(
+				'p',
+				{ className: 'oppDate' },
+				month,
+				'-',
+				dt,
+				'-',
+				year
 			),
 			React.createElement(
 				'h3',
-				{ className: 'domoStat' },
-				'Cunning: ',
-				domo.stats.cunning
+				null,
+				'Info'
+			),
+			React.createElement(
+				'p',
+				{ className: 'oppInfo' },
+				opp.info
 			),
 			React.createElement(
 				'h3',
-				{ className: 'domoStat' },
-				'Fortitude: ',
-				domo.stats.fortitude
+				null,
+				'Contact'
 			),
 			React.createElement(
-				'h3',
-				{ className: 'domoStat' },
-				'Treachery: ',
-				domo.stats.treachery
+				'div',
+				{ className: 'contactInfo' },
+				React.createElement(
+					'p',
+					{ className: 'oppEmail' },
+					opp.email
+				),
+				React.createElement(
+					'p',
+					{ className: 'oppPhone' },
+					opp.phone
+				),
+				React.createElement(
+					'p',
+					{ className: 'oppOther' },
+					opp.other
+				)
 			),
 			React.createElement(
-				'h3',
-				{ className: 'domoStat' },
-				'HP: ',
-				domo.stats.hp
+				'form',
+				(_React$createElement = {
+					className: 'responseForm'
+				}, _defineProperty(_React$createElement, 'className', 'oppForm'), _defineProperty(_React$createElement, 'onSubmit', this.handleRSVP), _defineProperty(_React$createElement, 'name', 'responseForm'), _defineProperty(_React$createElement, 'action', '/rsvp'), _defineProperty(_React$createElement, 'method', 'POST'), _React$createElement),
+				React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
+				React.createElement('input', { type: 'hidden', name: 'uniqueId', value: opp.uniqueId }),
+				React.createElement('input', { className: 'oppRespond', type: 'submit', value: 'RSVP' })
+			),
+			React.createElement(
+				'form',
+				(_React$createElement2 = {
+					className: 'bookmarkForm'
+				}, _defineProperty(_React$createElement2, 'className', 'oppForm'), _defineProperty(_React$createElement2, 'onSubmit', this.handleBookmark), _defineProperty(_React$createElement2, 'name', 'bookmarkForm'), _defineProperty(_React$createElement2, 'action', '/bookmark'), _defineProperty(_React$createElement2, 'method', 'POST'), _React$createElement2),
+				React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
+				React.createElement('input', { type: 'hidden', name: 'uniqueId', value: opp.uniqueId }),
+				React.createElement('input', { className: 'oppBookmark', type: 'submit', value: 'Bookmark' })
 			)
 		);
-	});
+	}.bind(this));
 
 	return React.createElement(
 		'div',
-		{ className: 'domoList' },
-		domoNodes
+		null,
+		React.createElement(
+			'div',
+			{ id: 'filters' },
+			'FILTERS',
+			React.createElement(
+				'button',
+				{ id: 'filterNone', onClick: this.loadOppsFromServer },
+				'None'
+			),
+			React.createElement(
+				'button',
+				{ id: 'filterBookmark', onClick: this.loadOppsByBookmark },
+				'Bookmarks'
+			),
+			React.createElement(
+				'button',
+				{ id: 'filterRSVP', onClick: this.loadOppsByRSVP },
+				'RSVPs'
+			)
+		),
+		React.createElement(
+			'div',
+			{ className: 'oppList' },
+			oppNodes
+		)
 	);
 };
 
 var setup = function setup(csrf) {
-	DomoFormClass = React.createClass({
-		displayName: 'DomoFormClass',
+	OppFormClass = React.createClass({
+		displayName: 'OppFormClass',
 
-		handleSubmit: handleDomo,
-		handleDelete: handleDeleteDomo,
-		render: renderDomo
+		handleSubmit: handleMakeOpp,
+		render: renderOpp
 	});
 
-	DomoListClass = React.createClass({
-		displayName: 'DomoListClass',
+	OppListClass = React.createClass({
+		displayName: 'OppListClass',
 
-		loadDomosFromServer: function loadDomosFromServer() {
-			sendAjax('GET', '/getDomos', null, function (data) {
-				this.setState({ data: data.domos });
+		loadOppsFromServer: function loadOppsFromServer() {
+			sendAjax('GET', '/getOpps', null, function (data) {
+				this.setState({ data: data.opps });
 			}.bind(this));
+
+			$('#filterNone').className = 'selected';
+			$('#filterBookmark').className = '';
+			$('#filterRSVP').className = '';
+		},
+		loadOppsByBookmark: function loadOppsByBookmark() {
+			sendAjax('GET', '/getBookmarks', null, function (data) {
+				this.setState({ data: data.opps });
+			}.bind(this));
+
+			$('#filterNone').className = '';
+			$('#filterBookmark').className = 'selected';
+			$('#filterRSVP').className = '';
+		},
+		loadOppsByRSVP: function loadOppsByRSVP() {
+			sendAjax('GET', '/getRSVPs', null, function (data) {
+				this.setState({ data: data.opps });
+			}.bind(this));
+
+			$('#filterNone').className = '';
+			$('#filterBookmark').className = '';
+			$('#filterRSVP').className += 'selected';
 		},
 		getInitialState: function getInitialState() {
 			return { data: [] };
 		},
 		componentDidMount: function componentDidMount() {
-			this.loadDomosFromServer();
+			this.loadOppsFromServer();
 		},
-		render: renderDomoList
+		handleRSVP: handleRSVPOpp,
+		handleBookmark: handleBookmarkOpp,
+		render: renderOppList
 	});
 
-	domoForm = ReactDOM.render(React.createElement(DomoFormClass, { csrf: csrf }), document.querySelector('#makeDomo'));
+	oppForm = ReactDOM.render(React.createElement(OppFormClass, { csrf: csrf }), document.querySelector('#makeOpp'));
 
-	domoRenderer = ReactDOM.render(React.createElement(DomoListClass, null), document.querySelector('#domos'));
+	oppRenderer = ReactDOM.render(React.createElement(OppListClass, { csrf: csrf }), document.querySelector('#opps'));
 };
 
 var getToken = function getToken() {
@@ -209,11 +324,9 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
 	$("#errorMessage").text(message);
-	$("#domoMessage").animate({ width: 'toggle' }, 350);
 };
 
 var redirect = function redirect(response) {
-	$("#domoMessage").animate({ width: 'hide' }, 350);
 	window.location = response.redirect;
 };
 
