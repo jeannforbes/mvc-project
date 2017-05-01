@@ -72,7 +72,7 @@ app.use(cookieParser());
 
 app.use(csrf());
 app.use((err, req, res, next) => {
-  console.log("poohie");
+  console.log('poohie');
   console.log(req.body);
   if (err.code !== 'EBADCSRFTOKEN') return next(err);
 

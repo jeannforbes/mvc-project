@@ -1,6 +1,5 @@
 const models = require('../models');
 const Opp = models.Opp;
-const Account = models.Account;
 
 const makerPage = (req, res) => {
   Opp.OppModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -20,8 +19,8 @@ const makeOpp = (req, res) => {
     name: req.body.name,
     date: req.body.date,
     info: req.body.info,
-    phone: req.body.phone, 
-    email: req.body.email, 
+    phone: req.body.phone,
+    email: req.body.email,
     other: req.body.other,
     responses: [],
     bookmarks: [],
@@ -48,7 +47,6 @@ const makeOpp = (req, res) => {
 };
 
 const getOpps = (request, response) => {
-  const req = request;
   const res = response;
 
   return Opp.OppModel.find({}, (err, docs) => {

@@ -47,15 +47,12 @@ const validatePassword = (doc, password, callback) => {
 };
 
 AccountSchema.statics.changePassword = (userId, pass, callback) => {
-  
   AccountModel.generateHash(pass, (salt, hash) => {
-    const updatedAccount = AccountModel.updateOne( 
-      {_id: userId},
-      { $set : {password: hash, salt: salt }, }
+    AccountModel.updateOne(
+      { _id: userId },
+      { $set: { password: hash, salt } }
     ).exec(callback);
-
   });
-
 };
 
 AccountSchema.statics.findByUsername = (name, callback) => {
@@ -71,7 +68,7 @@ AccountSchema.statics.findById = (id, callback) => {
     _id: id,
   };
   return AccountModel.findOne(search, callback);
-}
+};
 
 AccountSchema.statics.generateHash = (password, callback) => {
   const salt = crypto.randomBytes(saltLength);
@@ -100,9 +97,9 @@ AccountSchema.statics.authenticate = (username, password, callback) =>
 
       return callback();
     });
-});
+  });
 
-  AccountSchema.statics.authenticateById = (id, password, callback) =>
+AccountSchema.statics.authenticateById = (id, password, callback) =>
   AccountModel.findByUsername(id, (err, doc) => {
     if (err) {
       return callback(err);
@@ -119,7 +116,7 @@ AccountSchema.statics.authenticate = (username, password, callback) =>
 
       return callback();
     });
-});
+  });
 
 AccountModel = mongoose.model('Account', AccountSchema);
 

@@ -39,11 +39,11 @@ const OppSchema = new mongoose.Schema({
     default: 'No description given',
   },
   phone: {
-      type: String,
-      set: setString,
-      required: false,
-      default: 'No phone number provided',
-    },
+    type: String,
+    set: setString,
+    required: false,
+    default: 'No phone number provided',
+  },
   email: {
     type: String,
     set: setString,
@@ -66,7 +66,7 @@ const OppSchema = new mongoose.Schema({
     required: true,
     default: [],
   },
-   owner: {
+  owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
     ref: 'Account',
@@ -103,20 +103,18 @@ OppSchema.statics.findByOwner = (ownerId, callback) => {
 };
 
 OppSchema.statics.addBookmark = (uId, ownerId, callback) => {
-
-  const updatedOpp = OppModel.updateOne( 
-    {uniqueId: uId},
-    { $addToSet : {bookmarks: ownerId }, }
+  const updatedOpp = OppModel.updateOne(
+    { uniqueId: uId },
+    { $addToSet: { bookmarks: ownerId } }
   ).exec(callback);
 
   return updatedOpp;
 };
 
 OppSchema.statics.addRSVP = (uId, ownerId, callback) => {
-
-  const updatedOpp = OppModel.updateOne( 
-    {uniqueId: uId},
-    { $addToSet : {rsvps: ownerId }, }
+  const updatedOpp = OppModel.updateOne(
+    { uniqueId: uId },
+    { $addToSet: { rsvps: ownerId } }
   ).exec(callback);
 
   return updatedOpp;

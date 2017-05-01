@@ -85,32 +85,30 @@ const signup = (request, response) => {
 };
 
 const passwordChange = (req, res) => {
+  const pass = `${req.body.pass}`;
 
-  req.body.pass = `${req.body.pass}`;
-  req.body.pass2 = `${req.body.pass2}`;
-  
-  const updatedAccount = Account.AccountModel.changePassword(
+  Account.AccountModel.changePassword(
     req.session.account._id,
-    req.body.pass, (err, docs) => {
-      if(err){
+    pass, (err) => {
+      if (err) {
         console.log(err);
         return res.status(400).json({ error: 'An error occurred' });
       }
 
       return res.json({ redirect: '/account' });
-  });
+    });
 };
 
 const addBookmark = (req, res) => {
-  const updatedOpp = Opp.OppModel.addBookmark(
-    req.body.uniqueId, 
-    req.session.account._id, (err, docs) => {
-      if(err){
+  Opp.OppModel.addBookmark(
+    req.body.uniqueId,
+    req.session.account._id, (err) => {
+      if (err) {
         console.log(err);
         return res.status(400).json({ error: 'An error occurred' });
       }
-      return res.status(200).json({message: 'Bookmarked successfully'});
-  });
+      return res.status(200).json({ message: 'Bookmarked successfully' });
+    });
 };
 
 const getBookmarks = (req, res) => {
@@ -121,27 +119,26 @@ const getBookmarks = (req, res) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.status(200).json({opps: docs});
+    return res.status(200).json({ opps: docs });
   });
 };
 
 const addRSVP = (req, res) => {
-  const updatedOpp = Opp.OppModel.addRSVP( 
-    req.body.uniqueId, 
-    req.session.account._id, (err, docs) => {
-      if(err){
+  Opp.OppModel.addRSVP(
+    req.body.uniqueId,
+    req.session.account._id, (err) => {
+      if (err) {
         console.log(err);
         return res.status(400).json({ error: 'An error occurred' });
       }
 
-      return res.status(200).json({message: 'RSVPed successfully'});
-  });
-
+      return res.status(200).json({ message: 'RSVPed successfully' });
+    });
 };
 
 const getRSVPs = (req, res) => {
   const id = req.session.account._id;
-  return Opp.OppModel.find({rsvps: id }, (err, docs) => {
+  return Opp.OppModel.find({ rsvps: id }, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
