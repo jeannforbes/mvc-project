@@ -4,7 +4,7 @@ var handleLogin = function handleLogin(e) {
 	e.preventDefault();
 
 	if ($('#user').val() == '' || $('#pass').val() == '') {
-		handleError('Username or password is empty');
+		handleError('RAWR!  Username or password is empty');
 		return false;
 	}
 
@@ -17,12 +17,12 @@ var handleSignup = function handleSignup(e) {
 	e.preventDefault();
 
 	if ($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
-		handleError('All fields are required');
+		handleError('RAWR!  All fields are required');
 		return false;
 	}
 
 	if ($('#pass').val() !== $('#pass2').val()) {
-		handleError('Passwords do not match');
+		handleError('RAWR! Passwords do not match');
 		return false;
 	}
 
