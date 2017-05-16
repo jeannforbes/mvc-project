@@ -18,6 +18,19 @@ var handlePasswordChange = function handlePasswordChange(e) {
 	return false;
 };
 
+var handleUsernameChange = function handleUsernameChange(e){
+	e.preventDefault();
+
+	if( $('#currentUsername') == '' || ('#pass').val() == ''){
+		handleError('All fields are required');
+		return false;
+	}
+
+	sendAjax('POST', $('#usernameChangeForm').attr('action'), $('#usernameChangeForm').serialize(), redirect);
+
+	return false;
+}
+
 var renderPasswordChangeWindow = function renderPasswordChange() {
 	return React.createElement(
 		'form',
@@ -31,7 +44,7 @@ var renderPasswordChangeWindow = function renderPasswordChange() {
 		React.createElement(
 			'label',
 			{ htmlFor: 'pass' },
-			'New Password:'
+			'Change Password:'
 		),
 		React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'new password' }),
 		React.createElement('input', { id: 'pass2', type: 'password', name: 'pass2', placeholder: 'retype password' }),
@@ -40,15 +53,36 @@ var renderPasswordChangeWindow = function renderPasswordChange() {
 	);
 };
 
+var renderUsernameChangeWindow = function renderUsernameChangeWindow(){
+	return React.createElement(
+		'form',
+		{ id: 'usernameChangeForm',
+			name: 'usernameChangeForm',
+			onSubmit: this.handleSubmit,
+			action: '/usernameChange',
+			method: 'POST',
+			className: 'mainForm'
+		},
+		React.createElement(
+			'label',
+			{ htmlFor: 'username' },
+			'Change Username:'
+		),
+		React.createElement('input', { id: 'username', type: 'username', name: 'username', placeholder: 'new username' }),
+		React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
+		React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
+		React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Change Username' })
+	);
+};
+
 var createPasswordChangeWindow = function createPasswordChangeWindow(csrf) {
 	var PasswordChangeWindow = React.createClass({
 		displayName: 'PasswordChangeWindow',
-
 		handleSubmit: handlePasswordChange,
 		render: renderPasswordChangeWindow,
 	});
 
-	ReactDOM.render(React.createElement(PasswordChangeWindow, { csrf: csrf }), document.querySelector('#content'));
+	ReactDOM.render(React.createElement(PasswordChangeWindow, { csrf: csrf }), document.querySelector('#passchange'));
 };
 
 var setup = function setup(csrf) {

@@ -68,27 +68,15 @@ nav p, nav h1{
     background-color: #333;
     color: white;
     height: 100%;
-    width:20%;
+    width:30%;
 
     box-shadow: 4px 4px 10px 0 #000;
 }
-
-#passwordChangeForm, #signupForm, #loginForm{
-    position: relative;
-    left: 10%;
-    width: 70%;
-    height: 100%;
-    padding: 20px;
-
-    background-color: #333;
-    color: white;
-}
-#passwordChangeForm *, #signupForm *, #loginForm *{
+#passwordChangeForm *, #signupForm *, #loginForm *, #usernameChangeForm *{
     position: relative;
     left: 5%;
     width: 90%;
 }
-
 #oppInfo{
     height: 200px;
 }
@@ -98,7 +86,7 @@ input, textarea{
     margin: 10px;
 }
 
-.opp{
+.opp, #passwordChangeForm, #signupForm, #loginForm, #usernameChangeForm{
     padding: 10px;
     margin: 10px;
     background-color: #55acee;
@@ -113,7 +101,7 @@ input, textarea{
     float: left;
     display: inline-block;
     position: relative;
-    width: 75%;
+    width: 65%;
     color: white;
 }
 
@@ -132,6 +120,9 @@ button, input, textarea{
     margin: 5px;
     width: 120px;
 }
+#oppForm input, #oppForm textarea{
+    width: 90%;
+}
 button, .oppRespond, .oppBookmark, .makeOppSubmit{
     font-size: 1em;
     background-color: #66bdff;
@@ -144,7 +135,17 @@ button:hover, .oppRespond:hover, .oppBookmark:hover, .makeOppSubmit:hover{
 .selected{
     background-color: orange !important;
 }
-
+.myOppData, .oppName{
+    background-color: #ffd67a;
+    padding: 1px;
+    padding-left: 5px;
+    border-radius: 5px;
+}
+.oppName{
+    background-color: #ffb347;
+    margin: 0;
+    padding: 10px;
+}
 #errorMessage{
     z-index: 999;
     top: 50%;

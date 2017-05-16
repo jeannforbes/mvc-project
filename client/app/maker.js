@@ -81,9 +81,9 @@ const renderOppList = function(){
 		return(
 			<div>
 			<div id='filters'>FILTERS
-			    <button onClick={this.loadOppsFromServer}>None</button>
-				<button onClick={this.loadOppsByBookmark}>Bookmarks</button>
-			  	<button onClick={this.loadOppsByRSVP}>RSVPs</button>
+			    <button id='filterNone' onClick={this.loadOppsFromServer}>None</button>
+				<button id='filterBookmark' onClick={this.loadOppsByBookmark}>Bookmarks</button>
+			  	<button id='filterRSVP' onClick={this.loadOppsByRSVP}>RSVPs</button>
 			</div>
 			<div className='oppList'>
 			<h3 className='emptyOpp'>No events match this filter</h3>
@@ -164,28 +164,16 @@ const setup = function(csrf) {
 			sendAjax('GET', '/getOpps', null, function(data){
 				this.setState({data:data.opps});
 			}.bind(this));
-
-			$('#filterNone').className = 'selected';
-			$('#filterBookmark').className = '';
-			$('#filterRSVP').className = '';
 		},
 		loadOppsByBookmark: function(){
 			sendAjax('GET', '/getBookmarks', null, function(data){
 				this.setState({data:data.opps});
 			}.bind(this));
-
-			$('#filterNone').className = '';
-			$('#filterBookmark').className = 'selected';
-			$('#filterRSVP').className = '';
 		},
 		loadOppsByRSVP: function(){
 			sendAjax('GET', '/getRSVPs', null, function(data){
 				this.setState({data:data.opps});
 			}.bind(this));
-
-			$('#filterNone').className = '';
-			$('#filterBookmark').className = '';
-			$('#filterRSVP').className += 'selected';
 		},
 		getInitialState: function(){
 			return{data: []};

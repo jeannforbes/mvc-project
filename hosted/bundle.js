@@ -110,25 +110,42 @@ var renderOppList = function renderOppList() {
 			'div',
 			null,
 			React.createElement(
-				'div',
-				{ id: 'filters' },
-				'FILTERS',
-				React.createElement(
-					'button',
-					{ onClick: this.loadOppsFromServer },
-					'None'
-				),
-				React.createElement(
-					'button',
-					{ onClick: this.loadOppsByBookmark },
-					'Bookmarks'
-				),
-				React.createElement(
-					'button',
-					{ onClick: this.loadOppsByRSVP },
-					'RSVPs'
-				)
+			'div',
+			{ id: 'filters' },
+			'FILTERS',
+			React.createElement(
+				'button',
+				{ id: 'filterNone', onClick: (function(){
+					this.loadOppsFromServer();
+					this.selectButton('filterNone')}).bind(this)
+				},
+				'None'
 			),
+			React.createElement(
+				'button',
+				{ id: 'filterBookmark', onClick: (function(){
+					this.loadOppsByBookmark();
+					this.selectButton('filterBookmark')}).bind(this)
+				},
+				'Bookmarks'
+			),
+			React.createElement(
+				'button',
+				{ id: 'filterRSVP', onClick: (function(){
+					this.loadOppsByRSVP();
+					this.selectButton('filterRSVP')}).bind(this)
+				},
+				'RSVPs'
+			),
+			React.createElement(
+				'button',
+				{ id: 'filterMyOpps', onClick: (function(){
+					this.loadMyOpps();
+					this.selectButton('filterMyOpps')}).bind(this)
+				},
+				'My Events'
+			)
+		),
 			React.createElement(
 				'div',
 				{ className: 'oppList' },
@@ -186,30 +203,22 @@ var renderOppList = function renderOppList() {
 				null,
 				'Contact'
 			),
-			React.createElement(
-				'div',
-				{ className: 'contactInfo' },
-				React.createElement(
-					'p',
-					{ className: 'oppEmail' },
-					opp.email
-				),
-				React.createElement(
-					'p',
-					{ className: 'oppPhone' },
-					opp.phone
-				),
-				React.createElement(
-					'p',
-					{ className: 'oppOther' },
-					opp.other
-				)
+			React.createElement( 'div', { className: 'contactInfo' },
+				React.createElement( 'p', { className: 'oppEmail' }, opp.email),
+				React.createElement( 'p', { className: 'oppPhone' }, opp.phone),
+				React.createElement( 'p', { className: 'oppOther' }, opp.other)
 			),
 			React.createElement(
 				'form',
 				(_React$createElement = {
 					className: 'responseForm'
-				}, _defineProperty(_React$createElement, 'className', 'oppForm'), _defineProperty(_React$createElement, 'onSubmit', this.handleRSVP), _defineProperty(_React$createElement, 'name', 'responseForm'), _defineProperty(_React$createElement, 'action', '/rsvp'), _defineProperty(_React$createElement, 'method', 'POST'), _React$createElement),
+				}, _defineProperty(_React$createElement, 'className', 'oppForm'),
+				 _defineProperty(_React$createElement, 'onSubmit', this.handleRSVP),
+				 _defineProperty(_React$createElement, 'name', 'responseForm'), 
+				 _defineProperty(_React$createElement, 'action', '/rsvp'), 
+				 _defineProperty(_React$createElement, 'method', 'POST'), 
+				 _React$createElement),
+
 				React.createElement('input', { type: 'hidden', name: '_csrf', value: this.props.csrf }),
 				React.createElement('input', { type: 'hidden', name: 'uniqueId', value: opp.uniqueId }),
 				React.createElement('input', { className: 'oppRespond', type: 'submit', value: 'RSVP' })
@@ -235,18 +244,35 @@ var renderOppList = function renderOppList() {
 			'FILTERS',
 			React.createElement(
 				'button',
-				{ id: 'filterNone', onClick: this.loadOppsFromServer },
+				{ id: 'filterNone', onClick: (function(){
+					this.loadOppsFromServer();
+					this.selectButton('filterNone')}).bind(this)
+				},
 				'None'
 			),
 			React.createElement(
 				'button',
-				{ id: 'filterBookmark', onClick: this.loadOppsByBookmark },
+				{ id: 'filterBookmark', onClick: (function(){
+					this.loadOppsByBookmark();
+					this.selectButton('filterBookmark')}).bind(this)
+				},
 				'Bookmarks'
 			),
 			React.createElement(
 				'button',
-				{ id: 'filterRSVP', onClick: this.loadOppsByRSVP },
+				{ id: 'filterRSVP', onClick: (function(){
+					this.loadOppsByRSVP();
+					this.selectButton('filterRSVP')}).bind(this)
+				},
 				'RSVPs'
+			),
+			React.createElement(
+				'button',
+				{ id: 'filterMyOpps', onClick: (function(){
+					this.loadMyOpps();
+					this.selectButton('filterMyOpps')}).bind(this)
+				},
+				'My Events'
 			)
 		),
 		React.createElement(
@@ -272,29 +298,24 @@ var setup = function setup(csrf) {
 			sendAjax('GET', '/getOpps', null, function (data) {
 				this.setState({ data: data.opps });
 			}.bind(this));
-
-			$('#filterNone').className = 'selected';
-			$('#filterBookmark').className = '';
-			$('#filterRSVP').className = '';
 		},
-		loadOppsByBookmark: function loadOppsByBookmark(e) {
+		loadOppsByBookmark: function loadOppsByBookmark() {
 			sendAjax('GET', '/getBookmarks', null, function (data) {
 				this.setState({ data: data.opps });
-				e.target.className = selected;
 			}.bind(this));
-
-			$('#filterNone').className = '';
-			$('#filterBookmark').className = 'selected';
-			$('#filterRSVP').className = '';
 		},
 		loadOppsByRSVP: function loadOppsByRSVP() {
 			sendAjax('GET', '/getRSVPs', null, function (data) {
 				this.setState({ data: data.opps });
 			}.bind(this));
-
-			$('#filterNone').className = '';
-			$('#filterBookmark').className = '';
-			$('#filterRSVP').className += 'selected';
+		},
+		loadMyOpps: function loadMyOpps() {
+			sendAjax('GET', '/getMyOpps', null, function (data) {
+				this.setState({ data: data.opps });
+			}.bind(this));
+		},
+		selectButton: function selectButton(buttonId){
+			buttonSelect(buttonId);
 		},
 		getInitialState: function getInitialState() {
 			return { data: [] };
@@ -304,7 +325,7 @@ var setup = function setup(csrf) {
 		},
 		handleRSVP: handleRSVPOpp,
 		handleBookmark: handleBookmarkOpp,
-		render: renderOppList
+		render: renderOppList,
 	});
 
 	oppForm = ReactDOM.render(React.createElement(OppFormClass, { csrf: csrf }), document.querySelector('#makeOpp'));
@@ -336,6 +357,14 @@ var handleError = function handleError(message) {
 var redirect = function redirect(response) {
 	window.location = response.redirect;
 };
+
+var buttonSelect = function buttonSelect(buttonId){
+	var buttons = document.getElementsByTagName('button');
+	for(var i=0; i<buttons.length; i++){
+		buttons[i].className = '';
+	}
+	document.getElementById(buttonId).className = 'selected';
+}
 
 var sendAjax = function sendAjax(type, action, data, success) {
 	$.ajax({
