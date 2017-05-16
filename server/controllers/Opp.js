@@ -22,8 +22,8 @@ const makeOpp = (req, res) => {
     phone: req.body.phone,
     email: req.body.email,
     other: req.body.other,
-    responses: [mongoose.Types.ObjectId(req.session.account._id)],
-    bookmarks: [mongoose.Types.ObjectId(req.session.account._id)],
+    rsvps: Array,
+    bookmarks: Array,
     owner: req.session.account._id,
     // This will MOST LIKELY generate an unique id -- it's not guaranteed.  But what is?
     uniqueId: new Date().valueOf(),

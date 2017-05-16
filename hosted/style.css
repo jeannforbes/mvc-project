@@ -142,7 +142,7 @@ button:hover, .oppRespond:hover, .oppBookmark:hover, .makeOppSubmit:hover{
     transition: background-color 0.4 ease;
 }
 .selected{
-    background-color: #99efff;
+    background-color: orange !important;
 }
 
 #errorMessage{

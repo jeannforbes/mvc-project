@@ -5,7 +5,7 @@
     "node": "7.5.0",
     "npm": "4.0.5"
   },
-  "description": "A Simple Login Example using Node.js, Mongo and Redis",
+  "description": "A place to make events and etc, for you!",
   "main": "./server/app.js",
   "scripts": {
     "buildLoginBundle":"babel ./client/helper --presets react --out-file ./hosted/loginBundle.js",
@@ -24,7 +24,7 @@
     "Redis",
     "Login"
   ],
-  "author": "Cody Van De Mark",
+  "author": "Jeannette Forbes",
   "license": "Apache 2.0",
   "dependencies": {
     "body-parser": "^1.15.0",

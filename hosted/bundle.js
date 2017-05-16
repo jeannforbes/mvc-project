@@ -277,9 +277,10 @@ var setup = function setup(csrf) {
 			$('#filterBookmark').className = '';
 			$('#filterRSVP').className = '';
 		},
-		loadOppsByBookmark: function loadOppsByBookmark() {
+		loadOppsByBookmark: function loadOppsByBookmark(e) {
 			sendAjax('GET', '/getBookmarks', null, function (data) {
 				this.setState({ data: data.opps });
+				e.target.className = selected;
 			}.bind(this));
 
 			$('#filterNone').className = '';
